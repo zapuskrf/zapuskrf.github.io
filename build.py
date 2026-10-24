@@ -71,6 +71,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--content", default=str(ROOT / "content" / "news"))
     ap.add_argument("--out", default=str(ROOT / "_site"))
+    ap.add_argument("--all", action="store_true",
+                    help="показать и ещё не выпущенные новости (для локального просмотра)")
     args = ap.parse_args()
 
     site = yaml.safe_load((ROOT / "site.yml").read_text(encoding="utf-8"))
@@ -81,6 +83,15 @@ def main():
     content_dir = Path(args.content)
     posts = [read_post(p, rubrics_by_name) for p in sorted(content_dir.glob("*.md"))]
     posts = [p for p in posts if not p["draft"]]
+    # На сайт попадают только новости, выпущенные по расписанию (scripts/release.py)
+    state = content_dir.parent / "published.txt"
+    if state.exists() and not args.all:
+        released = {line.split()[0] for line in state.read_text(encoding="utf-8").splitlines()
+                    if line.strip() and not line.startswith("#")}
+        waiting = [p["slug"] for p in posts if p["slug"] not in released]
+        if waiting:
+            print(f"Ждут выхода по расписанию: {len(waiting)}")
+        posts = [p for p in posts if p["slug"] in released]
     posts.sort(key=lambda p: (-p["date"].toordinal(), p["order"], p["slug"]))
 
     by_day = OrderedDict()

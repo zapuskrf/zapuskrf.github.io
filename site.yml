@@ -10,6 +10,12 @@ domain: ""
 telegram_channel: zapuskrf
 language: ru
 
+# Расписание выхода новостей (время московское).
+# Новости одного выпуска выходят по одной: order 1 — в первое время, order 2 — во второе и т.д.
+# Время отдельной новости можно задать в её файле: publish_at: "14:30"
+timezone: Europe/Moscow
+publish_times: ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"]
+
 rubrics:
   - name: Промышленность
     slug: promyshlennost

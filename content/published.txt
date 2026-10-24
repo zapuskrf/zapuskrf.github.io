@@ -1,0 +1,7 @@
+# Опубликованные новости: адрес и время выхода. Файл ведёт scripts/release.py — вручную не править.
+2026-10-24-3d-printer-rusmelt-100m  2026-10-24T09:00+0300
+2026-10-24-dvigatel-m105-sertifikat  2026-10-24T09:00+0300
+2026-10-24-elektrovoz-2es9  2026-10-24T09:00+0300
+2026-10-24-ivl-dlya-novorozhdennyh-hirana  2026-10-24T09:00+0300
+2026-10-24-klapany-dlya-aes-krasnodar  2026-10-24T09:00+0300
+2026-10-24-most-shkotovskij-rajon  2026-10-24T09:00+0300

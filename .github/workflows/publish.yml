@@ -1,12 +1,18 @@
 name: Сборка сайта и публикация в Telegram
 
+# Новости выходят по расписанию, по одной (см. publish_times в site.yml):
+#  - push в main (Merge выпуска, правки) — только пересборка сайта, в канал ничего не уходит;
+#  - каждые 15 минут — если время новости наступило, она появляется на сайте
+#    и затем публикуется в Telegram. За один запуск выходит не больше одной новости.
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -15,10 +21,49 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  release:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      slug: ${{ steps.pick.outputs.slug }}
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Выбрать новость, время которой наступило
+        id: pick
+        run: |
+          SLUG=$(python scripts/release.py)
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+      - name: Отметить новость как выпущенную
+        id: commit
+        if: steps.pick.outputs.slug != ''
+        run: |
+          git config user.name "zapusk-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/published.txt
+          git commit -m "Выпуск: ${{ steps.pick.outputs.slug }}"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep 5
+          done
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: release
+    if: >-
+      !cancelled() && needs.release.result != 'failure' &&
+      (github.event_name != 'schedule' || needs.release.outputs.slug != '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release.outputs.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -30,6 +75,7 @@ jobs:
 
   deploy:
     needs: build
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -39,42 +85,29 @@ jobs:
         uses: actions/deploy-pages@v4
 
   telegram:
-    # Посты уходят в канал только после того, как сайт со статьями опубликован
-    needs: deploy
-    if: github.event_name == 'push'
+    # Пост уходит в канал только после того, как страница новости опубликована
+    needs: [release, deploy]
+    if: ${{ !cancelled() && needs.deploy.result == 'success' && needs.release.outputs.slug != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          ref: ${{ needs.release.outputs.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install pyyaml
-      - name: Найти новые статьи
-        id: new
+      - name: Дождаться, пока страница откроется
         run: |
-          BEFORE="${{ github.event.before }}"
-          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-            echo "files=" >> "$GITHUB_OUTPUT"; exit 0
-          fi
-          FILES=$(git diff --name-only --diff-filter=A "$BEFORE" "${{ github.sha }}" -- 'content/news/*.md' | tr '\n' ' ')
-          echo "Новые статьи: $FILES"
-          echo "files=$FILES" >> "$GITHUB_OUTPUT"
-      - name: Дождаться, пока страницы откроются
-        if: steps.new.outputs.files != ''
-        run: |
-          FIRST=$(echo "${{ steps.new.outputs.files }}" | awk '{print $1}')
-          SLUG=$(basename "$FIRST" .md)
+          SLUG="${{ needs.release.outputs.slug }}"
           BASE=$(python -c "import yaml;print(yaml.safe_load(open('site.yml'))['url'].rstrip('/'))")
           for i in $(seq 1 30); do
             if curl -fsS -o /dev/null "$BASE/news/$SLUG/"; then echo "Страница доступна"; exit 0; fi
             sleep 10
           done
           echo "Страница не открылась за 5 минут, публикую всё равно"
-      - name: Опубликовать посты
-        if: steps.new.outputs.files != ''
+      - name: Опубликовать пост
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL: ${{ vars.TELEGRAM_CHANNEL }}
-        run: python scripts/telegram_post.py ${{ steps.new.outputs.files }}
+        run: python scripts/telegram_post.py "content/news/${{ needs.release.outputs.slug }}.md"
