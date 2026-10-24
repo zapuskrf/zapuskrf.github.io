@@ -3,6 +3,7 @@
   <url><loc>{{ site.url }}/</loc></url>
   <url><loc>{{ site.url }}/archive/</loc></url>
   <url><loc>{{ site.url }}/about/</loc></url>
+  <url><loc>{{ site.url }}/privacy/</loc></url>
   {% for r in rubrics %}<url><loc>{{ site.url }}/rubric/{{ r.slug }}/</loc></url>
   {% endfor %}
   {% for p in posts %}<url><loc>{{ site.url }}{{ p.url }}</loc><lastmod>{{ p.date }}</lastmod></url>

@@ -125,6 +125,7 @@ def main():
     render("index.html", "index.html", days=days[:7], page_url="/")
     render("archive.html", "archive/index.html", days=days, page_url="/archive/")
     render("about.html", "about/index.html", page_url="/about/")
+    render("privacy.html", "privacy/index.html", page_url="/privacy/")
     render("404.html", "404.html", page_url="/404.html")
     for r in rubrics:
         render("rubric.html", f"rubric/{r['slug']}/index.html", rubric=r,

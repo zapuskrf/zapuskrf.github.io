@@ -40,6 +40,8 @@ def message(meta, url, rubrics):
     # сообщение отправляется в HTML-разметке: экранируем текст,
     # ссылку на статью прячем под слово «Подробнее...»
     text = html.escape(text, quote=False)
+    # UTM-метка: в Метрике видно, сколько читателей пришло из канала
+    url += ("&" if "?" in url else "?") + "utm_source=telegram&utm_medium=social&utm_campaign=post"
     text += f'\n\n<a href="{html.escape(url)}">Подробнее...</a>'
     return text
 
