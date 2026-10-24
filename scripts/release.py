@@ -9,9 +9,10 @@
 
 Время выхода новости:
   - publish_at в front matter (например «2026-10-25 14:30» или «14:30»), иначе
-  - дата выпуска (date) + время из site.yml → publish_times по порядку order:
-    первая новость дня — в первое время, вторая — во второе и т.д.
-    Если новостей больше, чем времён, лишние встают на последнее время.
+  - дата выпуска (date) + расписание из site.yml: первая новость дня (по order)
+    выходит в publish_start, каждая следующая — через publish_interval минут.
+    Если новостей так много, что последняя не успевает до publish_end,
+    интервал сокращается, чтобы все вышли в окне.
 
 Использование:
   python scripts/release.py            — выпустить одну новость (печатает её slug)
@@ -58,7 +59,10 @@ def published_slugs():
 
 def schedule(site):
     tz = ZoneInfo(site.get("timezone", "Europe/Moscow"))
-    times = [parse_time(t) for t in site.get("publish_times") or ["09:00"]]
+    start = parse_time(site.get("publish_start", "06:00"))
+    end = parse_time(site.get("publish_end", "23:00"))
+    interval = int(site.get("publish_interval", 60))
+    window = (end.hour * 60 + end.minute) - (start.hour * 60 + start.minute)
     posts = []
     for path in sorted(NEWS.glob("*.md")):
         meta = front_matter(path)
@@ -72,6 +76,9 @@ def schedule(site):
         by_day.setdefault(p["date"], []).append(p)
     for day, items in by_day.items():
         items.sort(key=lambda p: (p["order"], p["slug"]))
+        step = interval
+        if len(items) > 1:
+            step = min(interval, window / (len(items) - 1))
         for i, p in enumerate(items):
             when = p["meta"].get("publish_at")
             if when:
@@ -83,7 +90,7 @@ def schedule(site):
                 else:
                     at = dt.datetime.fromisoformat(s)
             else:
-                at = dt.datetime.combine(day, times[min(i, len(times) - 1)])
+                at = dt.datetime.combine(day, start) + dt.timedelta(minutes=round(i * step))
             p["at"] = at.replace(tzinfo=tz) if at.tzinfo is None else at
     return sorted(posts, key=lambda p: (p["at"], p["order"], p["slug"])), tz
 
