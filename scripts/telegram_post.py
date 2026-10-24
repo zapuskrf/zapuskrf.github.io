@@ -35,12 +35,12 @@ def message(meta, url, rubrics):
         text = f"{emoji} {meta['title']}\n\n{meta['lead']}".strip()
     # строка-заглушка из шаблона убирается, ссылка ставится ниже
     text = re.sub(r"\n*(Подробнее|Источник):.*$", "", text, flags=re.M).rstrip()
+    # хэштеги в канал не публикуются: строки, состоящие только из #тегов, убираются
+    text = re.sub(r"\n*^\s*(#\w+\s*)+$", "", text, flags=re.M).rstrip()
     # сообщение отправляется в HTML-разметке: экранируем текст,
     # ссылку на статью прячем под слово «Подробнее...»
     text = html.escape(text, quote=False)
     text += f'\n\n<a href="{html.escape(url)}">Подробнее...</a>'
-    if meta.get("hashtags"):
-        text += f"\n\n{html.escape(meta['hashtags'].strip(), quote=False)}"
     return text
 
 
