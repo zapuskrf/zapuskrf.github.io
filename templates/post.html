@@ -23,7 +23,7 @@
         <th scope="row">Регион</th><td>{{ post.region or 'Россия' }}</td>
       </tr>
       <tr>
-        <th scope="row">Статус</th><td>{% if post.status %}<span class="status">{{ post.status }}</span>{% else %}—{% endif %}</td>
+        <th scope="row">Статус</th><td>{% if post.status %}{% set st = (site.statuses or []) | selectattr('name', 'equalto', post.status) | first %}<span class="status"{% if st %} style="--sc: {{ st.color }}"{% endif %}>{{ post.status }}</span>{% else %}—{% endif %}</td>
         <th scope="row">Опубликовано</th><td><time datetime="{{ post.date }}">{{ post.date | ru_date }}</time></td>
       </tr>
     </table>
