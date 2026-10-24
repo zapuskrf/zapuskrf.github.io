@@ -6,6 +6,7 @@
   TELEGRAM_BOT_TOKEN  — токен бота (секрет репозитория)
   TELEGRAM_CHANNEL    — @адрес канала; если пусто, берётся из site.yml
 """
+import html
 import json
 import os
 import re
@@ -32,11 +33,14 @@ def message(meta, url, rubrics):
     if not text:
         emoji = rubrics.get(meta.get("rubric"), {}).get("emoji", "")
         text = f"{emoji} {meta['title']}\n\n{meta['lead']}".strip()
-    # строка-заглушка из шаблона заменяется настоящей ссылкой
-    text = re.sub(r"\n*Подробнее:.*$", "", text, flags=re.M).rstrip()
-    text += f"\n\nПодробнее: {url}"
+    # строка-заглушка из шаблона убирается, ссылка ставится ниже
+    text = re.sub(r"\n*(Подробнее|Источник):.*$", "", text, flags=re.M).rstrip()
+    # сообщение отправляется в HTML-разметке: экранируем текст,
+    # ссылку на статью прячем под слово «Источник»
+    text = html.escape(text, quote=False)
+    text += f'\n\n<a href="{html.escape(url)}">Источник</a>'
     if meta.get("hashtags"):
-        text += f"\n\n{meta['hashtags'].strip()}"
+        text += f"\n\n{html.escape(meta['hashtags'].strip(), quote=False)}"
     return text
 
 
@@ -44,7 +48,9 @@ def send(token, chat, text):
     data = urllib.parse.urlencode({
         "chat_id": chat,
         "text": text,
-        "link_preview_options": json.dumps({"prefer_large_media": True}),
+        "parse_mode": "HTML",
+        # без карточки-предпросмотра ссылки, чтобы не нагружать ленту
+        "link_preview_options": json.dumps({"is_disabled": True}),
     }).encode()
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
     for attempt in range(3):
