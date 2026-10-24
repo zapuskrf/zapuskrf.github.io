@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import story %}
+{% set page_title = rubric.name %}
+{% set page_description = 'Новости рубрики «' ~ rubric.name ~ '»: ' ~ site.tagline %}
+{% block content %}
+<div class="wrap">
+  <header class="pagehead" style="--rc: {{ rubric.color }}">
+    <h1>{{ rubric.name }}</h1>
+    <p>{{ rubric.posts | length }} материалов. Новые сверху.</p>
+  </header>
+  {% if rubric.posts %}
+  <div class="list">
+    {% for p in rubric.posts %}{{ story(p, show_date=True) }}{% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">В этой рубрике пока нет материалов. Они появятся с ближайшими выпусками.</p>
+  {% endif %}
+</div>
+{% endblock %}

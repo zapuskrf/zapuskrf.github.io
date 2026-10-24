@@ -1,0 +1,12 @@
+{% macro story(p, lead=False, show_date=False) %}
+<article class="story{% if lead %} story--lead{% endif %}" style="--rc: {{ p.rubric_obj.color }}">
+  <p class="story__meta">
+    <a class="rubtag" href="/rubric/{{ p.rubric_obj.slug }}/">{{ p.rubric }}</a>
+    {% if p.region %}<span class="story__region">{{ p.region }}</span>{% endif %}
+    {% if show_date %}<time datetime="{{ p.date }}">{{ p.date | ru_date }}</time>{% endif %}
+  </p>
+  <h3 class="story__title"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+  <p class="story__lead">{{ p.lead }}</p>
+  <a class="story__more" href="{{ p.url }}" aria-label="Подробнее: {{ p.title }}">Подробнее</a>
+</article>
+{% endmacro %}

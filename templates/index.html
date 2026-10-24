@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import story %}
+{% block content %}
+<div class="wrap">
+{% if not days %}
+  <section class="empty">
+    <h1>Первый выпуск выходит в ближайшее утро</h1>
+    <p>Каждый день здесь появляются новости о запущенных производствах, новых технологиях и введённых в строй объектах. Чтобы не пропустить выпуск, подпишитесь на <a href="https://t.me/{{ site.telegram_channel }}">канал в Telegram</a>.</p>
+  </section>
+{% endif %}
+{% for day, items in days %}
+  <section class="issue{% if loop.first %} issue--today{% endif %}" aria-labelledby="d{{ loop.index }}">
+    <header class="issue__head">
+      <h2 id="d{{ loop.index }}" class="issue__date"><span class="issue__day">{{ day.day }}</span> <span class="issue__month">{{ (day | ru_date(False)).split(' ')[1] }}</span></h2>
+      <p class="issue__sub">{{ day | weekday }}, {{ items | length }} {{ 'новость' if items|length % 10 == 1 and items|length % 100 != 11 else ('новости' if items|length % 10 in [2,3,4] and items|length % 100 not in [12,13,14] else 'новостей') }}</p>
+    </header>
+    <div class="issue__body">
+      {% for p in items %}{{ story(p, lead=(loop.first and loop.length > 1)) }}{% endfor %}
+    </div>
+  </section>
+{% endfor %}
+{% if days %}
+  <p class="tomore"><a href="/archive/">Все выпуски в архиве</a></p>
+{% endif %}
+</div>
+{% endblock %}

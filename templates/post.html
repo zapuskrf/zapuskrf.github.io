@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import story %}
+{% set page_title = post.title %}
+{% set page_description = post.lead %}
+{% set og_type = 'article' %}
+{% block head %}
+<meta property="article:published_time" content="{{ post.date }}">
+<meta property="article:section" content="{{ post.rubric }}">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"NewsArticle","headline":{{ post.title | tojson }},"datePublished":"{{ post.date }}","description":{{ post.lead | tojson }},"articleSection":{{ post.rubric | tojson }},"publisher":{"@type":"Organization","name":{{ site.name | tojson }}},"mainEntityOfPage":"{{ site.url }}{{ post.url }}"}
+</script>
+{% endblock %}
+{% block content %}
+<article class="post" style="--rc: {{ post.rubric_obj.color }}">
+  <div class="wrap wrap--text">
+    <p class="crumbs"><a href="/">Главная</a> / <a href="/rubric/{{ post.rubric_obj.slug }}/">{{ post.rubric }}</a></p>
+    <h1 class="post__title">{{ post.title }}</h1>
+    <p class="post__lead">{{ post.lead }}</p>
+
+    <table class="stamp" aria-label="Сведения о событии">
+      <tr>
+        <th scope="row">Рубрика</th><td><a href="/rubric/{{ post.rubric_obj.slug }}/">{{ post.rubric }}</a></td>
+        <th scope="row">Регион</th><td>{{ post.region or 'Россия' }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Статус</th><td>{% if post.status %}<span class="status">{{ post.status }}</span>{% else %}—{% endif %}</td>
+        <th scope="row">Дата события</th><td>{{ (post.event_date | ru_date) if post.event_date else '—' }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Опубликовано</th><td><time datetime="{{ post.date }}">{{ post.date | ru_date }}</time></td>
+        <th scope="row">Источников</th><td>{{ post.sources | length }}</td>
+      </tr>
+    </table>
+
+    <div class="prose">
+      {{ post.body | safe }}
+    </div>
+
+    {% if post.sources %}
+    <section class="sources" aria-labelledby="src">
+      <h2 id="src">Источники</h2>
+      <ol>
+        {% for s in post.sources %}
+        <li><a href="{{ s.url }}" rel="noopener" target="_blank">{{ s.title }}</a></li>
+        {% endfor %}
+      </ol>
+      <p class="sources__note">Все сведения в статье взяты из официальных источников, указанных выше.</p>
+    </section>
+    {% endif %}
+
+    <p class="share">
+      <a class="btn" href="https://t.me/share/url?url={{ (site.url ~ post.url) | urlencode }}&text={{ post.title | urlencode }}" rel="noopener" target="_blank">Поделиться в Telegram</a>
+      <a class="btn btn--ghost" href="https://t.me/{{ site.telegram_channel }}" rel="noopener" target="_blank">Подписаться на канал</a>
+    </p>
+  </div>
+</article>
+
+{% if related %}
+<section class="related wrap">
+  <h2 class="related__title">Ещё в рубрике «{{ post.rubric }}»</h2>
+  <div class="related__list">
+    {% for p in related %}{{ story(p, show_date=True) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

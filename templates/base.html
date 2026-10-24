@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% set full_title = (page_title ~ ' — ' ~ site.name) if page_title else (site.name ~ ' — ' ~ site.tagline) %}
+<title>{{ full_title }}</title>
+<meta name="description" content="{{ page_description or site.description }}">
+<link rel="canonical" href="{{ site.url }}{{ page_url }}">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:type" content="{{ og_type or 'website' }}">
+<meta property="og:title" content="{{ page_title or site.name }}">
+<meta property="og:description" content="{{ page_description or site.description }}">
+<meta property="og:url" content="{{ site.url }}{{ page_url }}">
+<meta property="og:image" content="{{ site.url }}/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1f2b38">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+<header class="masthead">
+  <div class="wrap masthead__row">
+    <a class="logo" href="/" aria-label="{{ site.name }} — на главную">
+      <span class="logo__btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
+      <span class="logo__word">{{ site.name }}</span>
+    </a>
+    <p class="masthead__tagline">{{ site.tagline }}</p>
+    <a class="masthead__tg" href="https://t.me/{{ site.telegram_channel }}" rel="noopener" target="_blank">Канал в Telegram</a>
+  </div>
+  <nav class="rubnav" aria-label="Рубрики">
+    <div class="wrap rubnav__row">
+      <a href="/" {% if page_url == '/' %}aria-current="page"{% endif %}>Все новости</a>
+      {% for r in rubrics %}
+      <a href="/rubric/{{ r.slug }}/" style="--rc: {{ r.color }}" {% if page_url == '/rubric/' ~ r.slug ~ '/' %}aria-current="page"{% endif %}>{{ r.name }}</a>
+      {% endfor %}
+      <a href="/archive/" {% if page_url == '/archive/' %}aria-current="page"{% endif %}>Архив</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__row">
+    <div>
+      <p class="footer__name">{{ site.name }}</p>
+      <p>{{ site.description }}</p>
+    </div>
+    <ul class="footer__links">
+      <li><a href="/about/">О проекте и принципах отбора</a></li>
+      <li><a href="https://t.me/{{ site.telegram_channel }}" rel="noopener" target="_blank">Telegram: @{{ site.telegram_channel }}</a></li>
+      <li><a href="/feed.xml">RSS</a></li>
+    </ul>
+    <p class="footer__copy">© {{ year }} {{ site.name }}. При использовании материалов ссылка на сайт обязательна.</p>
+  </div>
+</footer>
+</body>
+</html>

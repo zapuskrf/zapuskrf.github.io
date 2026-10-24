@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% set page_title = 'Архив выпусков' %}
+{% block content %}
+<div class="wrap">
+  <header class="pagehead">
+    <h1>Архив выпусков</h1>
+    <p>Все новости по дням, начиная с самых свежих.</p>
+  </header>
+  {% if not days %}<p class="empty">Архив начнёт заполняться с первым выпуском.</p>{% endif %}
+  {% for day, items in days %}
+  <section class="arch">
+    <h2 class="arch__date">{{ day | ru_date }}<span>{{ day | weekday }}</span></h2>
+    <ul class="arch__list">
+      {% for p in items %}
+      <li style="--rc: {{ p.rubric_obj.color }}"><a href="{{ p.url }}">{{ p.title }}</a> <span class="arch__rub">{{ p.rubric }}{% if p.region %}, {{ p.region }}{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+# Настройки сайта «Запуск»
+name: Запуск
+tagline: Новые производства, технологии и инфраструктура России
+description: Ежедневная лента о новых предприятиях, технологиях и инфраструктурных объектах России. Только официальные источники.
+# Адрес сайта без слеша в конце. После покупки домена поменять на https://zapuskrf.ru
+url: https://zapuskrf.github.io
+# Свой домен (например zapuskrf.ru). Пусто — используется адрес github.io
+domain: ""
+# Telegram-канал
+telegram_channel: zapuskrf
+language: ru
+
+rubrics:
+  - name: Промышленность
+    slug: promyshlennost
+    emoji: "🏭"
+    color: "#4a5a6a"
+  - name: Технологии и изобретения
+    slug: tehnologii
+    emoji: "🔬"
+    color: "#5d4a8a"
+  - name: Инфраструктура
+    slug: infrastruktura
+    emoji: "🛣"
+    color: "#b5651d"
+  - name: Логистика
+    slug: logistika
+    emoji: "🚢"
+    color: "#2f6f78"
+  - name: IT и связь
+    slug: it
+    emoji: "💻"
+    color: "#2b5ea7"
