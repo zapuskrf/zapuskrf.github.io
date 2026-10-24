@@ -24,11 +24,7 @@
       </tr>
       <tr>
         <th scope="row">Статус</th><td>{% if post.status %}<span class="status">{{ post.status }}</span>{% else %}—{% endif %}</td>
-        <th scope="row">Дата события</th><td>{{ (post.event_date | ru_date) if post.event_date else '—' }}</td>
-      </tr>
-      <tr>
         <th scope="row">Опубликовано</th><td><time datetime="{{ post.date }}">{{ post.date | ru_date }}</time></td>
-        <th scope="row">Источников</th><td>{{ post.sources | length }}</td>
       </tr>
     </table>
 
