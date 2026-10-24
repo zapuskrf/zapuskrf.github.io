@@ -5,7 +5,7 @@
   --ink: #1f2b38;
   --steel: #5f6b78;
   --rule: #c9d0d6;
-  --signal: #f2b705;
+  --signal: #d7372b;
   --link: #1d4f86;
   --sans: "PT Sans Narrow", "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
   --serif: "PT Serif", Georgia, "Times New Roman", serif;
@@ -26,7 +26,7 @@ a:hover { color: var(--ink); }
 :focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 img { max-width: 100%; height: auto; }
 
-.skip { position: absolute; left: -999px; top: 8px; background: var(--signal); color: var(--ink); padding: 8px 12px; z-index: 10; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--signal); color: #fff; padding: 8px 12px; z-index: 10; }
 .skip:focus { left: 8px; }
 
 .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 16px; }
@@ -36,12 +36,7 @@ img { max-width: 100%; height: auto; }
 .masthead { background: var(--surface); border-bottom: 1px solid var(--rule); }
 .masthead__row { display: flex; align-items: center; gap: 24px; padding-top: 18px; padding-bottom: 14px; }
 .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); }
-.logo__btn {
-  width: 42px; height: 42px; border-radius: 8px; background: var(--signal);
-  display: grid; place-items: center;
-  box-shadow: inset 0 -3px 0 rgba(31, 43, 56, .25);
-}
-.logo__btn svg { width: 26px; height: 26px; fill: var(--ink); }
+.logo__mark { width: 42px; height: 42px; display: block; flex: none; }
 .logo__word { font: 700 36px/1 var(--sans); letter-spacing: .5px; text-transform: uppercase; }
 .masthead__tagline { margin: 0; font: 400 17px/1.3 var(--sans); color: var(--steel); max-width: 260px; }
 .masthead__tg {
@@ -122,12 +117,12 @@ main { padding: 32px 0 56px; min-height: 60vh; }
 .stamp td { font-size: 17px; line-height: 1.25; width: 32%; }
 .stamp td a { color: var(--ink); }
 .status {
-  display: inline-block; background: var(--signal); color: var(--ink); font-weight: 700;
+  display: inline-block; background: var(--signal); color: #fff; font-weight: 700;
   padding: 2px 8px 1px 22px; border-radius: 3px; position: relative;
 }
 .status::before {
   content: ""; position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-  border-left: 8px solid var(--ink); border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
 }
 
 .prose { font-size: 19px; line-height: 1.68; }
@@ -176,10 +171,11 @@ main { padding: 32px 0 56px; min-height: 60vh; }
 .footer { background: var(--ink); color: #c9d3dd; font: 400 16px/1.5 var(--sans); }
 .footer__row { display: grid; grid-template-columns: 1fr auto; gap: 16px 40px; padding-top: 32px; padding-bottom: 32px; }
 .footer p { margin: 0; max-width: 520px; }
-.footer__name { font-size: 22px; font-weight: 700; color: var(--signal); margin-bottom: 6px !important; text-transform: uppercase; }
+.footer__name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px !important; text-transform: uppercase; }
 .footer__links { list-style: none; margin: 0; padding: 0; }
 .footer__links li { margin-bottom: 6px; }
 .footer a { color: #fff; }
+.footer__name::after { content: ""; display: block; width: 40px; height: 4px; background: var(--signal); margin-top: 6px; }
 .footer__copy { grid-column: 1 / -1; color: #8d9bab; font-size: 14px; }
 
 @media (max-width: 900px) {
@@ -193,7 +189,7 @@ main { padding: 32px 0 56px; min-height: 60vh; }
 @media (max-width: 560px) {
   body { font-size: 17px; }
   .logo__word { font-size: 30px; }
-  .logo__btn { width: 36px; height: 36px; }
+  .logo__mark { width: 36px; height: 36px; }
   .masthead__tg { padding: 8px 10px; font-size: 15px; }
   .issue--today .issue__day { display: inline; font-size: 44px; }
   .issue--today .issue__month { display: inline; font-size: 44px; }
