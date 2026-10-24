@@ -16,7 +16,7 @@ language: ru
 # не успевают выйти до publish_end, интервал автоматически сокращается.
 # Время отдельной новости можно задать в её файле: publish_at: "14:30"
 timezone: Europe/Moscow
-publish_start: "06:00"
+publish_start: "07:00"
 publish_end: "23:00"
 publish_interval: 60
 
