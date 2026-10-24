@@ -1,0 +1,28 @@
+name: Переписать опубликованные посты в Telegram
+
+# Запускается вручную: Actions → этот workflow → Run workflow.
+# В поле pairs — пары «номер_сообщения=путь_к_статье» через пробел.
+on:
+  workflow_dispatch:
+    inputs:
+      pairs:
+        description: "Например: 2=content/news/2026-10-24-elektrovoz-2es9.md 3=content/news/..."
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  edit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL: ${{ vars.TELEGRAM_CHANNEL }}
+          PAIRS: ${{ inputs.pairs }}
+        run: python scripts/telegram_edit.py $PAIRS
