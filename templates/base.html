@@ -16,7 +16,9 @@
 <meta property="og:image" content="{{ site.url }}/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1f2b38">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +31,7 @@
 <header class="masthead">
   <div class="wrap masthead__row">
     <a class="logo" href="/" aria-label="{{ site.name }} — на главную">
-      <svg class="logo__mark" viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" fill="#1f2b38"/><path d="M21 7 31 20h-6v9h-8v-9h-6z" fill="#fff"/><rect x="8" y="32" width="26" height="4" fill="#d7372b"/></svg>
-      <span class="logo__word">{{ site.name }}</span>
+      <img class="logo__img" src="/assets/logo.svg" alt="{{ site.name }}" width="200" height="42">
     </a>
     <p class="masthead__tagline">{{ site.tagline }}</p>
     <a class="masthead__tg" href="https://t.me/{{ site.telegram_channel }}" rel="noopener" target="_blank">Канал в Telegram</a>
@@ -53,7 +54,7 @@
 <footer class="footer">
   <div class="wrap footer__row">
     <div>
-      <p class="footer__name">{{ site.name }}</p>
+      <p class="footer__name"><img src="/assets/logo-dark.svg" alt="{{ site.name }}" width="162" height="34"></p>
       <p>{{ site.description }}</p>
     </div>
     <ul class="footer__links">
