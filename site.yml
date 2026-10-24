@@ -10,7 +10,7 @@ domain: ""
 telegram_channel: zapuskrf
 language: ru
 # Номер счётчика Яндекс Метрики (только цифры). Пусто — Метрика не подключается
-yandex_metrika_id: ""
+yandex_metrika_id: "113769501"
 # Контакт для вопросов по персональным данным (страница /privacy/). Пусто — указывается Telegram-канал
 contact_email: ""
 
