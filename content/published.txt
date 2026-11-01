@@ -37,3 +37,4 @@
 2026-11-01-bankon-vyazma-liniya-banok  2026-11-01T09:25+0300
 2026-11-01-sapr-maks-oez-dubna  2026-11-01T10:33+0300
 2026-11-01-gibkie-memristory-kurchatov-mfti  2026-11-01T11:28+0300
+2026-11-01-peleng-kaliningrad-dopolnitelnoe-sudno  2026-11-01T12:18+0300
