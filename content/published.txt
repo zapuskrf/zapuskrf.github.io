@@ -44,3 +44,4 @@
 2026-11-02-splav-elektromobili-misis  2026-11-02T10:17+0300
 2026-11-02-e-flops-server-m2-arm  2026-11-02T11:40+0300
 2026-11-03-vtoroj-reaktor-ledokol-chukotka  2026-11-03T07:48+0300
+2026-11-03-ruskon-novorossijsk-nahodka-kitaj  2026-11-03T08:50+0300
