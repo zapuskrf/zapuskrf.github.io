@@ -57,3 +57,4 @@
 2026-11-05-port-elga-proektnaya-moshchnost  2026-11-05T08:32+0300
 2026-11-05-oktyabrskij-most-cherepovec  2026-11-05T09:44+0300
 2026-11-05-arenadata-adqm-text-to-sql  2026-11-05T11:02+0300
+2026-11-06-most-cherez-sok-samarskaya-oblast  2026-11-06T07:40+0300
