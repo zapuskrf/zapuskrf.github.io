@@ -59,3 +59,4 @@
 2026-11-05-arenadata-adqm-text-to-sql  2026-11-05T11:02+0300
 2026-11-06-most-cherez-sok-samarskaya-oblast  2026-11-06T07:40+0300
 2026-11-06-nek-teh-mnogofidernyj-schetchik-rosseti  2026-11-06T08:41+0300
+2026-11-06-rlabc-ii-nastrojka-uskoritelya-vshe-iyaf  2026-11-06T09:46+0300
